@@ -1,0 +1,116 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+Gyroscope access made easy
+
+<b>Example - basic</b>
+
+    <sensor-gyroscope></sensor-gyroscope>
+
+    <script>
+      var gyroscope = document.querySelector('sensor-gyroscope');
+      gyroscope.addEventListener('onGyroscopeUpdate', function(e) {
+        console.log('alpha:' + this.alpha,
+                    'beta:' + this.beta,
+                    'gamma:' + this.gamma);
+      });
+    </script>
+
+@element sensor-gyroscope
+@blurb Gyroscope access made easy
+@status alpha
+@homepage http://fvitullo.github.io/sensor-gyroscope
+-->
+
+<polymer-element name="sensor-gyroscope" attributes="alpha beta gamma">
+  <template>
+    <style>
+      :host {
+        display: none;
+      }
+    </style>
+  </template>
+  <script>
+      Polymer('sensor-gyroscope', {
+
+       /**
+        * Fired when the device orientation changes
+        *
+        * @event onGyroscopeUpdate
+        * @param {Object} detail
+        *   @param {alpha} Alpha 
+        *   @param {beta} Beta
+        *   @param {gamma} Gamma
+        */
+        /**
+        * Fired when the device orientation throws an error.
+        *
+        * @event onGyroscopeError
+        * @param {error} detail
+        */
+
+        publish: {
+          /**
+           * The alpha value.
+           * 
+           * @attribute alpha
+           * @type Number
+           * @default 0
+           */
+          alpha: {value: 0, reflect: true},
+          /**
+           * The beta value.
+           * 
+           * @attribute beta
+           * @type Number
+           * @default 0
+           */
+          beta: {value: 0, reflect: true},
+          /**
+           * The gamma value.
+           * 
+           * @attribute gamma
+           * @type Number
+           * @default 0
+           */
+          gamma: {value: 0, reflect: true}
+        },
+        ready: function() {
+          if (!window.DeviceOrientationEvent) {
+            this.alpha = "undefined";
+            this.beta = "undefined";
+            this.gamma = "undefined";
+            this.fire('onGyroscopeError',{
+              error:'DeviceOrientation not supported'
+            });
+          }else {      
+            window.ondeviceorientation = this.onDeviceOrientation.bind(this);
+          }
+        },
+         /**
+         * Success callback when the sensor is outputting data
+         * 
+         * @method onDeviceOrientation
+         * @param {OnDeviceOrientationEvent} OnDeviceOrientationEvent : absolute alpha beta gamma
+         */
+
+        onDeviceOrientation : function(event){
+          if(!event){
+            this.fire('onGyroscopeError',{
+              error:'unknown error'
+            });
+          }else{
+            this.alpha = event.alpha;
+            this.beta = event.beta;
+            this.gamma = event.gamma;
+
+            this.fire('onGyroscopeUpdate',{
+              alpha:this.alpha,
+              beta:this.beta,
+              gamma:this.gamma
+            });
+          }
+        }
+      });
+  </script>
+</polymer-element>
