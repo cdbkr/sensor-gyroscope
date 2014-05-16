@@ -1,0 +1,29 @@
+{
+    "name": "gyroscope",
+    "authors": [
+        "Francesco Paolo Vitullo"
+    ],
+    "license": "Apache2",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests",
+        "../"
+    ],
+    "keywords": [
+        "web-component",
+        "web-components",
+        "polymer",
+        "gyroscope",
+        "sensor"
+    ],
+    "version": "0.1",
+    "homepage": "http://www.francescovitullo.com",
+    "description": "Web component for the DeviceMotion API.",
+    "main": "sensor-gyroscope.html",
+    "dependencies": {
+        "polymer": "Polymer/polymer#0.2.3"
+    }
+}

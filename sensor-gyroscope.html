@@ -1,0 +1,50 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<polymer-element name="sensor-gyroscope" attributes="alpha beta gamma">
+  <template>
+    <style no-shim>
+      :host {
+        display: none;
+      }
+    </style>
+  </template>
+  <script>
+      Polymer('sensor-gyroscope', {
+        publish: {
+          alpha: {value: 0, reflect: true},
+          beta: {value: 0, reflect: true},
+          gamma: {value: 0, reflect: true}
+        },
+        ready: function() {
+          if (!window.DeviceOrientationEvent) {
+            this.alpha = "undefined";
+            this.beta = "undefined";
+            this.gamma = "undefined";
+            this.fire('onGyroscopeError',{
+              error:'DeviceOrientation not supported'
+            });
+          }else {      
+            window.ondeviceorientation = this.onDeviceOrientation.bind(this);
+          }
+        },
+        onDeviceOrientation : function(event){
+          if(!event){
+            this.fire('onGyroscopeError',{
+              error:'unknown error'
+            });
+          }else{
+            this.alpha = event.alpha;
+            this.beta = event.beta;
+            this.gamma = event.gamma;
+
+            this.fire('onGyroscopeUpdate',{
+              alpha:this.alpha,
+              beta:this.beta,
+              gamma:this.gamma
+            });
+          }
+
+        }
+      });
+  </script>
+</polymer-element>
